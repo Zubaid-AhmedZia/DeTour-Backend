@@ -1,11 +1,20 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
-const reviewController = require('../controllers/reviewController');
 const authController = require('../controllers/authController');
+
+const reviewRoute = require('./reviewRoutes'); // to access code of review post route
 
 const router = express.Router();
 
 // router.param('id', tourController.checkID);
+// router
+//   .route('/:tourId/reviews')
+//   .post(
+//     authController.protect,
+//     authController.restrictTo('user'),
+//     reviewController.postReview,
+//   );
+router.use('/:tourId/reviews', reviewRoute); //router is a middleware so we can use 'use' which is doing mounting here just like in app.js
 
 router
   .route('/top-5-cheap')
@@ -28,14 +37,6 @@ router
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
     tourController.deleteTour,
-  );
-
-router
-  .route('/:tourId/reviews')
-  .post(
-    authController.protect,
-    authController.restrictTo('user'),
-    reviewController.postReview,
   );
 
 module.exports = router;
